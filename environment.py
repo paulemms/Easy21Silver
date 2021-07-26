@@ -25,8 +25,8 @@ class Easy21Environment:
         self.dealer_first_card = None
         self.player_first_card = None
 
-    def get_initial_state(self):
-        """Reset initial state"""
+    def get_random_initial_state(self):
+        """Get random initial state"""
         self.dealer_first_card, _ = self.get_new_card()
         self.player_first_card, _ = self.get_new_card()
 
@@ -62,16 +62,39 @@ class Easy21Environment:
 
         return next_state, r
 
-    def get_episode(self, policy):
-        """Reset state then get episode"""
+    def get_episode(self, policy, initial_state=None):
+        """Get episode from a given or random initial state"""
         episode = list()
-        s = self.get_initial_state()
+        if initial_state is None:
+            s = self.get_random_initial_state()
+        else:
+            s = initial_state
         while s is not None:
             a = policy[s]
             s_dash, reward = self.step(s, a)
             episode.append((s, a, reward))
             s = s_dash
         return episode
+
+    def wins_dist(self, pi, num_samples=10000):
+        """Expected wins given a policy and the initial state"""
+
+        mean_wins = np.zeros((self.max_initial_dealer_card + 1,
+                              self.max_initial_dealer_card + 1))
+        for d in range(1, self.max_initial_dealer_card + 1):
+            for p in range(1, self.max_initial_dealer_card + 1):
+                s = (d, p)
+                num_wins = 0
+
+                for i in range(num_samples):
+                    ep = self.get_episode(pi, initial_state=s)
+                    reward = ep[-1][2]
+                    if reward == 1:
+                        num_wins += 1
+
+                mean_wins[s] = num_wins / num_samples
+
+        return mean_wins
 
     @staticmethod
     def get_new_card():
@@ -115,11 +138,10 @@ class Model:
 
 
 def test_policy(first_dealer_card, player_sum):
-    # if 14 < player_sum < 8 or first_dealer_card > 5:
-    #     return Action.STICK
-    # else:
-    #     return Action.HIT
-    return Action.HIT
+    if player_sum > 16:
+        return Action.STICK
+    else:
+        return Action.HIT
 
 
 def random_policy(first_dealer_card, player_sum):
@@ -139,3 +161,4 @@ def e_greedy(q, s, n0, n):
         a = Action(np.argmax(q[s]))  # greedy
 
     return a
+

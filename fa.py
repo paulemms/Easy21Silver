@@ -67,7 +67,7 @@ def lfa(num_episodes=20000, la=0, eps=0.05, alpha=0.01, exact_q=None):
         eligibility[:] = 0
 
         # start episode
-        s = e.get_initial_state()
+        s = e.get_random_initial_state()
         a = e_greedy_lfa(theta, s, eps)
 
         # repeat until episode terminates

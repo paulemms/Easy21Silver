@@ -4,6 +4,7 @@ import mc
 import td
 import fa
 import plots as plt
+import environment as env
 
 
 def timings(num_episodes=10000, repetitions=10):
@@ -21,12 +22,17 @@ if __name__ == "__main__":
     np.random.seed(100)
 
     # timings()
-    plt.standard_plots()
+    # plt.standard_plots()
 
     # plt.plot_sarsa_lambda_mse(alg=td.sarsa, title='MSE of SARSA(lambda)')
     # plt.plot_mse_episode(alg=td.sarsa, title='MSE of SARSA(lambda)', lambdas=[0.0, 1.0])
 
     # plt.plot_sarsa_lambda_mse(alg=fa.lfa, title='MSE of SARSA(lambda) with LFA')
     # plt.plot_mse_episode(alg=fa.lfa, title='MSE of SARSA(lambda) with LFA', lambdas=[0.0, 1.0])
+
+    e = env.Easy21Environment()
+    pi = np.full(e.state_size, env.Action.STICK)  # always stick
+    ave = plt.plot_wins_dist(e, pi)
+    print(f'Mean number of wins given policy is {ave:.3f}%')
 
 

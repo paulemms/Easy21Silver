@@ -15,7 +15,7 @@ def sarsa0(num_episodes=20000, n0=100, exact_q=None):
     for i in range(num_episodes):
 
         # start episode
-        s = e.get_initial_state()
+        s = e.get_random_initial_state()
         a = env.e_greedy(q, s, n0, n)
 
         # repeat until episode terminates
@@ -67,7 +67,7 @@ def sarsa(num_episodes=20000, n0=100, la=1, exact_q=None):
         eligibility[:] = 0
 
         # start episode
-        s = e.get_initial_state()
+        s = e.get_random_initial_state()
         a = env.e_greedy(q, s, n0, n)
 
         # repeat until episode terminates
