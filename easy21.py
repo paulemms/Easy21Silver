@@ -21,13 +21,12 @@ if __name__ == "__main__":
     np.random.seed(100)
 
     # timings()
-    # plt.standard_plots()
+    plt.standard_plots()
 
     # plt.plot_sarsa_lambda_mse(alg=td.sarsa, title='MSE of SARSA(lambda)')
     # plt.plot_mse_episode(alg=td.sarsa, title='MSE of SARSA(lambda)', lambdas=[0.0, 1.0])
 
     # plt.plot_sarsa_lambda_mse(alg=fa.lfa, title='MSE of SARSA(lambda) with LFA')
-    plt.plot_mse_episode(alg=fa.lfa, title='MSE of SARSA(lambda) with LFA', lambdas=[0.0, 1.0])
-
+    # plt.plot_mse_episode(alg=fa.lfa, title='MSE of SARSA(lambda) with LFA', lambdas=[0.0, 1.0])
 
 

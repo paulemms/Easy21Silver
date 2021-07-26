@@ -83,30 +83,36 @@ def plot_value_policy(model):
     v = np.max(model.final_q[1:, 1:], axis=2)
     pi = np.argmax(model.final_q[1:, 1:], axis=2)
 
-    # plot policy
-    fig_pi = pyplot.figure()
-    # fig_pi.canvas.manager.window.move(100, 100)
-    fig_pi.add_subplot(111)
-    centers = [1, pi.shape[1], 1, pi.shape[0]]
-    dx, = np.diff(centers[:2]) / (pi.shape[1] - 1)
-    dy, = -np.diff(centers[2:]) / (pi.shape[0] - 1)
-    extent = [centers[0] - dx / 2, centers[1] + dx / 2, centers[2] + dy / 2, centers[3] - dy / 2]
-    pyplot.imshow(pi, cmap='tab10', interpolation='nearest', extent=extent)
-    pyplot.xticks(np.arange(1, pi.shape[1] + 1, dtype=np.int))
+    # two plots side by side
+    fig = pyplot.figure(figsize=(14, 8))
+    ax1 = fig.add_subplot(122, projection='3d')
+    ax2 = fig.add_subplot(121)
 
     # plot value function
-    fig = pyplot.figure()
-    # fig.canvas.manager.window.move(200, 200)
-    ax = fig.add_subplot(111, projection='3d')
+    ax1.set_title("Value Function")
+    ax1.set_xlabel("Player Sum")
+    ax1.set_ylabel("First Dealer Card")
+    ax1.set_zlabel("V")
 
     # Make grid offset by one to reflect card values
     x = np.arange(1, v.shape[1] + 1)
     y = np.arange(1, v.shape[0] + 1)
     x, y = np.meshgrid(x, y)
 
-    surf = ax.plot_surface(x, y, v, cmap=cm.coolwarm, linewidth=0, antialiased=False)
-    fig.colorbar(surf, shrink=0.5, aspect=5)
+    ax1.plot_surface(x, y, v, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+    ax1.azim = -140
+    ax1.elev = 20
+
+    # plot policy
+    ax2.set_title("Optimal Policy")
+    ax2.set_xlabel("Player Sum")
+    ax2.set_ylabel("First Dealer Card")
+    centers = [1, pi.shape[1], 1, pi.shape[0]]
+    dx, = np.diff(centers[:2]) / (pi.shape[1] - 1)
+    dy, = -np.diff(centers[2:]) / (pi.shape[0] - 1)
+    extent = [centers[0] - dx / 2, centers[1] + dx / 2, centers[2] + dy / 2, centers[3] - dy / 2]
+    ax2.imshow(pi, cmap='tab10', interpolation='nearest', extent=extent)
+    ax2.set_xticks(np.arange(1, pi.shape[1] + 1, dtype=np.int))
 
     pyplot.show()
 
-    return model
