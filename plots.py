@@ -1,5 +1,5 @@
 import pdb
-
+import sys
 import numpy as np
 import matplotlib.pyplot as pyplot
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -119,20 +119,22 @@ def plot_value_policy(model):
     pyplot.show()
 
 
-def plot_wins_dist(e, pi):
+def plot_rewards_dist(e, pi, reward_text='winning'):
+    reward_dict = {'losing': -1, 'winning': 1, 'drawing': 0}
+    reward = reward_dict[reward_text]
     fig = pyplot.figure()
     ax = fig.add_subplot(111)
-    ax.set_title("Probability of winning given policy and initial state")
-    ax.set_xlabel("First Dealer Card")
-    ax.set_ylabel("First Player Card")
+    ax.set_title(f"Probability of {reward_text} given policy and initial state")
+    ax.set_xlabel("First Player Card")
+    ax.set_ylabel("First Dealer Card")
 
-    arr_dist = e.wins_dist(pi)
+    arr_dist = e.reward_dist(pi, reward=reward)
     arr = arr_dist[1:, 1:]
     centers = [1, arr.shape[1], 1, arr.shape[0]]
     dx, = np.diff(centers[:2]) / (arr.shape[1] - 1)
     dy, = -np.diff(centers[2:]) / (arr.shape[0] - 1)
     extent = [centers[0] - dx / 2, centers[1] + dx / 2, centers[2] + dy / 2, centers[3] - dy / 2]
-    img = ax.imshow(arr, interpolation='nearest', extent=extent)
+    img = ax.imshow(arr, interpolation='nearest', extent=extent)  # shows first array dimension as row
     ax.set_xticks(np.arange(1, arr.shape[1] + 1, dtype=np.int))
 
     divider = make_axes_locatable(ax)

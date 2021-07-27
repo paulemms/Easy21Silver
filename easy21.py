@@ -30,11 +30,11 @@ if __name__ == "__main__":
     # plt.plot_sarsa_lambda_mse(alg=fa.lfa, title='MSE of SARSA(lambda) with LFA')
     # plt.plot_mse_episode(alg=fa.lfa, title='MSE of SARSA(lambda) with LFA', lambdas=[0.0, 1.0])
 
-    # e = env.Easy21Environment()
-    # pi = np.full(e.state_size, env.Action.STICK)  # always stick
-    # ave = plt.plot_wins_dist(e, pi)
-    # print(f'Mean number of wins given policy is {ave:.3f}%')
-
-    plt.plot_value_policy(mc.monte_carlo(num_episodes=10000000))
-
+    e = env.Easy21Environment()
+    pi = np.full(e.state_size, env.Action.STICK)  # always stick
+    ave = plt.plot_rewards_dist(e, pi, reward_text='winning')
+    print(f'Mean number of rewards given policy is {ave:.3f}%')
+    # arr = e.reward_dist(pi)
+    # model = plt.plot_value_policy(mc.monte_carlo(num_episodes=10000000))
+    # print(model.df)
 

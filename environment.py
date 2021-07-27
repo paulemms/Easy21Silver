@@ -76,25 +76,25 @@ class Easy21Environment:
             s = s_dash
         return episode
 
-    def wins_dist(self, pi, num_samples=10000):
-        """Expected wins given a policy and the initial state"""
+    def reward_dist(self, pi, reward=1, num_samples=10000):
+        """Expected reward given a policy and the initial state"""
 
-        mean_wins = np.zeros((self.max_initial_dealer_card + 1,
-                              self.max_initial_dealer_card + 1))
+        mean_reward = np.zeros((self.max_initial_dealer_card + 1,
+                                self.max_initial_dealer_card + 1))
         for d in range(1, self.max_initial_dealer_card + 1):
             for p in range(1, self.max_initial_dealer_card + 1):
                 s = (d, p)
-                num_wins = 0
+                num_rewards = 0
 
                 for i in range(num_samples):
                     ep = self.get_episode(pi, initial_state=s)
-                    reward = ep[-1][2]
-                    if reward == 1:
-                        num_wins += 1
+                    r = ep[-1][2]
+                    if r == reward:
+                        num_rewards += 1
 
-                mean_wins[s] = num_wins / num_samples
+                mean_reward[s] = num_rewards / num_samples
 
-        return mean_wins
+        return mean_reward
 
     @staticmethod
     def get_new_card():
