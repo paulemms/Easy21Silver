@@ -123,8 +123,8 @@ def plot_wins_dist(e, pi):
     fig = pyplot.figure()
     ax = fig.add_subplot(111)
     ax.set_title("Probability of winning given policy and initial state")
-    ax.set_xlabel("First Player Card")
-    ax.set_ylabel("First Dealer Card")
+    ax.set_xlabel("First Dealer Card")
+    ax.set_ylabel("First Player Card")
 
     arr_dist = e.wins_dist(pi)
     arr = arr_dist[1:, 1:]
